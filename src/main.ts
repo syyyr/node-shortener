@@ -1,6 +1,7 @@
 import * as Mongo from "mongodb";
 import express from "express";
 import md5 from "md5";
+import isWebUri from "valid-url";
 
 let client = new Mongo.MongoClient("mongodb://localhost:27017/shortener", {
     useUnifiedTopology: true
@@ -54,10 +55,14 @@ const isValidReqBody = (body: any): body is { url: string } => {
 app.post("/", async (req, response) => {
     console.log(`POST /, body:`, req.body);
     if (isValidReqBody(req.body)) {
+        if (!isWebUri.isWebUri(req.body.url)) {
+            response.json({ ok: false, error: `"${req.body.url}" is not a valid URL by my standards.` });
+            return;
+        }
         let shortUrl = await createShortened(req.body.url);
         response.json({ ok: true, ...req.body, short: shortUrl });
     } else {
-        response.json({ ok: false, error: "Request was invalid." });
+        response.json({ ok: false, error: "Invalid request." });
     }
 });
 
