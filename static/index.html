@@ -19,6 +19,7 @@ body {
 }
 #input {
     border: 2px solid;
+    width: 100%;
     font-family: "Courier New", Courier, monospace;
 }
 .output {
@@ -36,11 +37,11 @@ body {
     </head>
     <body>
         <p>URL Shortener service</p>
-        <div id="input" contenteditable="true"></div>
+        <input id="input">
         <button id="send">Shorten</button>
         <div id="output"></div>
         <script>
-            const printError = (err/*: string*/) => {
+            const printError = (err) => {
                 const output = document.createElement("div");
                 output.className = "error";
                 output.innerText = `ERROR: ${err}`
@@ -49,7 +50,7 @@ body {
 
             document.getElementById("send").onclick = async () => {
                 document.getElementById("output").innerHTML = "";
-                const value = document.getElementById("input").innerText;
+                const value = document.getElementById("input").value;
                 try {
                     const response = await fetch("/", {
                         body: JSON.stringify({ url: value }),
