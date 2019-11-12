@@ -3,6 +3,8 @@ import express from "express";
 import md5 from "md5";
 import isWebUri from "valid-url";
 
+console.log("Server started.");
+
 let client = new Mongo.MongoClient("mongodb://localhost:27017/shortener", {
     useUnifiedTopology: true
 });
@@ -33,7 +35,7 @@ var options = {
     dotfiles: "ignore"
 };
 
-app.use(express.static("static", options));
+app.use(express.static("dist", options));
 app.use(express.json());
 
 app.get("/:link", async (req, response) => {

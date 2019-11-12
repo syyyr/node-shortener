@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>URL Shortener service</title>
+        <style>
+@font-face {
+    font-family: Helvetica;
+    src: url("helvetica.otf");
+}
+p {
+    font-size: 3em;
+    display: inline;
+}
+body {
+    font-family: "Helvetica";
+    width: 90%;
+    margin: auto;
+}
+#input {
+    border: 2px solid;
+    width: 100%;
+    font-family: "Courier New", Courier, monospace;
+}
+.output {
+    display: inline-block;
+}
+#link {
+    font-family: "Courier New", Courier, monospace;
+    display: inline-block;
+}
+.error {
+    color: red;
+    font-weight: bold;
+}
+        </style>
+    </head>
+    <body>
+        <p>URL Shortener service</p>
+        <input id="input">
+        <button id="send">Shorten</button>
+        <div id="output"></div>
+        <script src="bundle.js"> </script>
+    </body>
+</html>
