@@ -4,7 +4,7 @@
   "description": "",
   "private": true,
   "scripts": {
-    "start": "tsc && node build/main.js"
+    "start": "npx tsc && node build/main.js"
   },
   "author": "",
   "license": "ISC",
@@ -17,5 +17,8 @@
     "md5": "^2.2.1",
     "mongodb": "^3.3.4",
     "valid-url": "^1.0.9"
+  },
+  "devDependencies": {
+      "typescript": "^3.7.2"
   }
 }
