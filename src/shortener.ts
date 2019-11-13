@@ -2,6 +2,7 @@ import * as Mongo from "mongodb";
 import express from "express";
 import md5 from "md5";
 import isWebUri from "valid-url";
+import path from "path";
 
 let database: Mongo.Collection;
 const resolveShortened = async (shortUrl: string): Promise<string> => {
@@ -36,14 +37,21 @@ const shortener = async (prefix = "") => {
     await client.connect();
     database = client.db().collection("shortener");
     const router = express.Router();
-    const options = {
-        dotfiles: "ignore"
-    };
 
-    router.use(express.static("dist", options));
+    // This middleware translates the prefixed URL to a non-prefixed one
+    router.get(prefix + "/*", (req, _res, next) => {
+        console.log(req.url);
+        req.url = req.url.replace(new RegExp(`^${prefix}`), "");
+        console.log("parsed to: ", req.url);
+        next();
+    });
+
+    router.use(express.static(path.join(__dirname + "/../dist"), {
+        dotfiles: "ignore",
+    }));
     router.use(express.json());
 
-    router.get(prefix + "/:link", async (req, response) => {
+    router.get("/:link", async (req, response) => {
         let shortUrl = req.params["link"];
         console.log(`GET /${shortUrl}`);
         try {
@@ -55,7 +63,7 @@ const shortener = async (prefix = "") => {
         }
     });
 
-    router.post(prefix + "/", async (req, response) => {
+    router.post("/", async (req, response) => {
         console.log(`POST /, body:`, req.body);
         if (isValidReqBody(req.body)) {
             if (!isWebUri.isWebUri(req.body.url)) {
