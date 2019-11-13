@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
+  "main": "build/shortener.js",
   "scripts": {
-    "start": "npx tsc && npx webpack && node build/main.js"
+    "build-tsc": "npx tsc",
+    "build-webpack": "npx webpack",
+    "build": "npm run build-tsc && npm run build-webpack",
+    "start": "npm run build && node build/main.js"
   },
   "author": "",
   "license": "ISC",
