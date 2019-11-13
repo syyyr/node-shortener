@@ -38,20 +38,12 @@ const shortener = async (prefix = "") => {
     database = client.db().collection("shortener");
     const router = express.Router();
 
-    // This middleware translates the prefixed URL to a non-prefixed one
-    router.get(prefix + "/*", (req, _res, next) => {
-        console.log(req.url);
-        req.url = req.url.replace(new RegExp(`^${prefix}`), "");
-        console.log("parsed to: ", req.url);
-        next();
-    });
-
-    router.use(express.static(path.join(__dirname + "/../dist"), {
+    router.use("/s", express.static(path.join(__dirname + "/../dist"), {
         dotfiles: "ignore",
     }));
     router.use(express.json());
 
-    router.get("/:link", async (req, response) => {
+    router.get(prefix + "/:link", async (req, response) => {
         let shortUrl = req.params["link"];
         console.log(`GET /${shortUrl}`);
         try {
@@ -63,7 +55,7 @@ const shortener = async (prefix = "") => {
         }
     });
 
-    router.post("/", async (req, response) => {
+    router.post(prefix + "/", async (req, response) => {
         console.log(`POST /, body:`, req.body);
         if (isValidReqBody(req.body)) {
             if (!isWebUri.isWebUri(req.body.url)) {
