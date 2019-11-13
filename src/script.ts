@@ -7,16 +7,7 @@ const printError = (err: string) => {
     document.getElementById("output")!.appendChild(output);
 }
 
-document.getElementById("input")!.oninput = (ev) => {
-    const target = (<HTMLInputElement>ev.target);
-    if (target.value === "" || isWebUri.isWebUri(target.value)) {
-        target.className = "okInput";
-    } else {
-        target.className = "errorInput";
-    }
-}
-
-document.getElementById("send")!.onclick = async () => {
+const shorten = async () => {
     document.getElementById("output")!.innerHTML = "";
     const value = (<HTMLInputElement>document.getElementById("input")!).value;
     try {
@@ -54,3 +45,22 @@ document.getElementById("send")!.onclick = async () => {
         printError("Internal server error.");
     }
 };
+
+let input = document.getElementById("input")!;
+
+input.oninput = (ev) => {
+    const target = (<HTMLInputElement>ev.target);
+    if (target.value === "" || isWebUri.isWebUri(target.value)) {
+        target.className = "okInput";
+    } else {
+        target.className = "errorInput";
+    }
+}
+
+input.onkeypress = (ev) => {
+    if (ev.key === "Enter") {
+        shorten();
+    }
+}
+
+document.getElementById("send")!.onclick = shorten;
