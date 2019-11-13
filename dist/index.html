@@ -18,7 +18,7 @@ body {
     margin: auto;
 }
 #input {
-    border: 2px solid;
+    border-width: 2px;
     width: 100%;
     font-family: "Courier New", Courier, monospace;
 }
@@ -29,15 +29,23 @@ body {
     font-family: "Courier New", Courier, monospace;
     display: inline-block;
 }
-.error {
+.errorOutput {
     color: red;
     font-weight: bold;
+}
+.errorInput {
+    border-color: red;
+    background: salmon;
+}
+.okInput {
+    border-color: black;
+    background: white;
 }
         </style>
     </head>
     <body>
         <p>URL Shortener service</p>
-        <input id="input">
+        <input type="text" class="okInput" id="input">
         <button id="send">Shorten</button>
         <div id="output"></div>
         <script src="bundle.js"> </script>

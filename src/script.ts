@@ -1,8 +1,19 @@
+import isWebUri from "valid-url";
+
 const printError = (err: string) => {
     const output = document.createElement("div");
-    output.className = "error";
+    output.className = "errorOutput";
     output.innerText = `ERROR: ${err}`
     document.getElementById("output")!.appendChild(output);
+}
+
+document.getElementById("input")!.oninput = (ev) => {
+    const target = (<HTMLInputElement>ev.target);
+    if (target.value === "" || isWebUri.isWebUri(target.value)) {
+        target.className = "okInput";
+    } else {
+        target.className = "errorInput";
+    }
 }
 
 document.getElementById("send")!.onclick = async () => {
