@@ -51,9 +51,9 @@ let input = document.getElementById("input")!;
 input.oninput = (ev) => {
     const target = (<HTMLInputElement>ev.target);
     if (target.value === "" || isWebUri.isWebUri(target.value)) {
-        target.className = "okInput";
+        target.classList.replace("errorInput", "okInput");
     } else {
-        target.className = "errorInput";
+        target.classList.replace("okInput", "errorInput");
     }
 }
 

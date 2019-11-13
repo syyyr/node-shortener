@@ -21,10 +21,9 @@ body {
     border-width: 2px;
     width: 100%;
     font-family: "Courier New", Courier, monospace;
-    font-size: 2em;
 }
-.output {
-    display: inline-block;
+.big {
+    font-size: 2em;
 }
 #link {
     font-family: "Courier New", Courier, monospace;
@@ -46,9 +45,9 @@ body {
     </head>
     <body>
         <p>URL Shortener service</p>
-        <input type="text" class="okInput" id="input">
-        <button id="send">Shorten</button>
-        <div id="output"></div>
+        <input type="text" class="big okInput" id="input">
+        <button class="big" id="send">Shorten</button>
+        <div class="big" id="output"></div>
         <script src="bundle.js"> </script>
     </body>
 </html>
