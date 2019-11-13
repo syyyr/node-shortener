@@ -52,9 +52,17 @@ input.oninput = (ev) => {
     document.getElementById("output")!.innerHTML = "";
     const target = (<HTMLInputElement>ev.target);
     if (target.value === "" || isWebUri.isWebUri(target.value)) {
+        document.getElementById("fieldBgError")?.remove();
         target.classList.replace("errorInput", "okInput");
     } else {
         target.classList.replace("okInput", "errorInput");
+
+        if (document.getElementById("fieldBgError") === null) {
+            let elem = document.createElement("div");
+            elem.innerText = "invalid url";
+            elem.id = "fieldBgError";
+            target.insertAdjacentElement("afterend", elem);
+        }
     }
 }
 

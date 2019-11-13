@@ -29,6 +29,13 @@ body {
     font-family: "Courier New", Courier, monospace;
     display: inline-block;
 }
+#fieldBgError {
+    font-style: italic;
+    color: darkred;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
 .errorOutput {
     color: red;
     font-weight: bold;
@@ -45,7 +52,9 @@ body {
     </head>
     <body>
         <p>URL Shortener service</p>
-        <input type="text" autocomplete="off" class="big okInput" id="input">
+        <div style="position: relative">
+            <input type="text" autocomplete="off" placeholder="Type your URL..." class="big okInput" id="input">
+        </div>
         <button class="big" id="send">Shorten</button>
         <div class="big" id="output"></div>
         <script src="bundle.js"> </script>
