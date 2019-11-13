@@ -49,6 +49,7 @@ const shorten = async () => {
 let input = document.getElementById("input")!;
 
 input.oninput = (ev) => {
+    document.getElementById("output")!.innerHTML = "";
     const target = (<HTMLInputElement>ev.target);
     if (target.value === "" || isWebUri.isWebUri(target.value)) {
         target.classList.replace("errorInput", "okInput");
