@@ -38,7 +38,7 @@ const shortener = async (prefix = "") => {
     database = client.db().collection("shortener");
     const router = express.Router();
 
-    router.use("/s", express.static(path.join(__dirname + "/../dist"), {
+    router.use(prefix, express.static(path.join(__dirname + "/../dist"), {
         dotfiles: "ignore",
     }));
     router.use(express.json());
