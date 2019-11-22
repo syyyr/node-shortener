@@ -30,7 +30,7 @@ const isValidReqBody = (body: any): body is { url: string } => {
 };
 
 
-const shortener = async (prefix = "") => {
+const shortener = async (prefix = "", logger = (_req: express.Request, msg: string) => console.log(msg)) => {
     const client = new Mongo.MongoClient("mongodb://localhost:27017/shortener", {
         useUnifiedTopology: true
     });
@@ -45,10 +45,9 @@ const shortener = async (prefix = "") => {
 
     router.get(prefix + "/:link", async (req, response) => {
         let shortUrl = req.params["link"];
-        console.log(`GET /${shortUrl}`);
         try {
             let resolved = await resolveShortened(shortUrl);
-            console.log(`${shortUrl} is resolved to "${resolved}"`);
+            logger(req, `${shortUrl} is resolved to "${resolved}"`);
             response.redirect(resolved);
         } catch (err) {
             response.send(err.message);
@@ -56,15 +55,19 @@ const shortener = async (prefix = "") => {
     });
 
     router.post(prefix + "/", async (req, response) => {
-        console.log(`POST /, body:`, req.body);
+        logger(req, "New url to shorten.");
         if (isValidReqBody(req.body)) {
             if (!isWebUri.isWebUri(req.body.url)) {
-                response.json({ ok: false, error: `"${req.body.url}" is not a valid URL by my standards.` });
+                const errorMsg = `"${req.body.url}" is not a valid URL by my standards.`;
+                logger(req, errorMsg);
+                response.json({ ok: false, error: errorMsg});
                 return;
             }
             let shortUrl = await createShortened(req.body.url);
+            logger(req, `New short url created: ${shortUrl}`);
             response.json({ ok: true, ...req.body, short: shortUrl });
         } else {
+            logger(req, "Invalid request." );
             response.json({ ok: false, error: "Invalid request." });
         }
     });
