@@ -1,5 +1,6 @@
 import * as Mongo from "mongodb";
 import express from "express";
+import fs from "fs";
 import md5 from "md5";
 import isWebUri from "valid-url";
 import path from "path";
@@ -29,6 +30,13 @@ const isValidReqBody = (body: any): body is { url: string } => {
     return typeof body === "object" && typeof body.url === "string";
 };
 
+const file = fs.readFileSync(path.join(__dirname, "../template/redirect.html"), {
+    encoding: "utf8"
+});
+
+const generateRedirectPage = (url: string): string => {
+    return file.replace(/@URL@/gu, url);
+};
 
 const shortener = async (prefix = "", logger = (_req: express.Request, msg: string) => console.log(msg)) => {
     const client = new Mongo.MongoClient("mongodb://localhost:27017/shortener", {
@@ -48,7 +56,7 @@ const shortener = async (prefix = "", logger = (_req: express.Request, msg: stri
         try {
             let resolved = await resolveShortened(shortUrl);
             logger(req, `${shortUrl} is resolved to "${resolved}"`);
-            response.redirect(resolved);
+            response.send(generateRedirectPage(resolved));
         } catch (err) {
             response.send(err.message);
         }
