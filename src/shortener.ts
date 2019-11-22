@@ -35,7 +35,7 @@ const file = fs.readFileSync(path.join(__dirname, "../template/redirect.html"), 
 });
 
 const generateRedirectPage = (url: string): string => {
-    return file.replace(/@URL@/gu, url);
+    return file.replace(/@URL@/gu, Buffer.from(url).toString("base64"));
 };
 
 const shortener = async (prefix = "", logger = (_req: express.Request, msg: string) => console.log(msg)) => {
