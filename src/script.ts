@@ -72,7 +72,7 @@ const placeholderWidth = placeholder.offsetWidth;
 const input = document.getElementById("input")!;
 
 const showPlaceholder = () => {
-    placeholder.style.display = "inline-block";
+    placeholder.style.display = "block";
     input.style.paddingLeft = `${placeholderWidth}px`;
     input.style.width = `calc(100% - ${placeholderWidth}px)`;
 };
