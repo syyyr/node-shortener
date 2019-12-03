@@ -8,6 +8,9 @@ const printError = (err: string) => {
 }
 
 const processInput = (input: string) => {
+    if (input === "") {
+        return "";
+    }
     if (/^.+:\/\//.test(input)) {
         hidePlaceholder();
         return input;
@@ -20,6 +23,9 @@ const processInput = (input: string) => {
 const shorten = async () => {
     document.getElementById("output")!.innerHTML = "";
     const value = processInput((<HTMLInputElement>document.getElementById("input")!).value);
+    if (value === "") {
+        return;
+    }
     try {
         const response = await fetch("/", {
             body: JSON.stringify({ url: value }),
@@ -81,7 +87,7 @@ input.oninput = (ev) => {
 
     const input = processInput(target.value);
 
-    if (input === "http://" || isWebUri.isWebUri(input)) {
+    if (input === "" || isWebUri.isWebUri(input)) {
         document.getElementById("fieldBgError")?.remove();
         target.classList.replace("errorInput", "okInput");
     } else {
