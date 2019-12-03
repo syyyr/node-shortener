@@ -9,6 +9,7 @@ const printError = (err: string) => {
 
 const processInput = (input: string) => {
     if (input === "") {
+        showPlaceholder();
         return "";
     }
     if (/^.+:\/\//.test(input)) {
