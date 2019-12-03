@@ -20,6 +20,9 @@ const processInput = (input: string) => {
     }
 };
 
+let enterToCopy = false;
+let enterToCopyUrl: string;
+
 const shorten = async () => {
     document.getElementById("output")!.innerHTML = "";
     const value = processInput((<HTMLInputElement>document.getElementById("input")!).value);
@@ -49,7 +52,7 @@ const shorten = async () => {
 
         const output = document.createElement("div");
         output.className = "output";
-        output.innerText = "Your link: ";
+        output.innerText = "Your link (press Enter to copy to clipboard): ";
         const url = `${document.URL}${json.short}`;
         const link = document.createElement("a");
         link.href = url;
@@ -57,6 +60,8 @@ const shorten = async () => {
         link.className = "link";
         output.appendChild(link);
         document.getElementById("output")!.appendChild(output);
+        enterToCopy = true;
+        enterToCopyUrl = url;
     } catch (err) {
         printError("Internal server error.");
     }
@@ -102,10 +107,38 @@ input.oninput = (ev) => {
     }
 }
 
-input.onkeypress = (ev) => {
-    if (ev.key === "Enter") {
-        shorten();
+const copyToClipboard = (url: string) => {
+    navigator.clipboard.writeText(url).then(() => {
+        document.getElementById("copied")!.style.display = "inline-block";
+    }).catch(() => {
+        document.getElementById("copiedError")!.style.display = "inline-block";
+    });
+};
+
+const handleKeyPress = (keyName: string) => {
+    if (keyName === "Enter") {
+        if (enterToCopy) {
+            copyToClipboard(enterToCopyUrl);
+        } else {
+            shorten();
+        }
+    } else {
+        enterToCopy = false;
+        document.getElementById("copied")!.style.display = "none";
+        document.getElementById("copiedError")!.style.display = "none";
     }
-}
+};
+
+
+input.onkeypress = (ev) => {
+    handleKeyPress(ev.key);
+};
+
+// I want backspace to delete output. I want the keys to be as responsive as possible, so I can't use onChange.
+input.onkeydown = (ev) => {
+    if (ev.key === "Backspace") {
+        handleKeyPress("ev.key");
+    }
+};
 
 document.getElementById("send")!.onclick = shorten;
