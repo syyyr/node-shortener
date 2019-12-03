@@ -74,13 +74,11 @@ const input = document.getElementById("input")!;
 const showPlaceholder = () => {
     placeholder.style.display = "block";
     input.style.paddingLeft = `${placeholderWidth}px`;
-    input.style.width = `calc(100% - ${placeholderWidth}px)`;
 };
 
 const hidePlaceholder = () => {
     placeholder.style.display = "none";
     input.style.paddingLeft = "0px";
-    input.style.width = "100%";
 };
 
 showPlaceholder();

@@ -28,19 +28,17 @@ body {
     position: absolute;
     bottom: 0;
     right: 0;
+    margin-right: 2px;
 }
 #httpHint {
     font-family: "Courier New", Courier, monospace;
     font-size: 1em;
     position: absolute;
-    transform: translate(0%, -50%);
-    top: 50%;
     margin: 0 2px ;
     color: grey;
 }
 #input {
     border-width: 2px;
-    display: block;
     font-family: "Courier New", Courier, monospace;
     width: 100%;
 }
@@ -70,7 +68,7 @@ body {
     </head>
     <body>
         <p>URL Shortener service</p>
-        <div style="position: relative">
+        <div style="position: relative; display: flex; align-items: center;">
             <div id="httpHint" class="noselect">http://</div>
             <input autofocus autocomplete="off" class="big okInput" id="input">
         </div>
