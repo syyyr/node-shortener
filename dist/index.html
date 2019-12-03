@@ -60,12 +60,22 @@ body {
     color: red;
     font-weight: bold;
 }
+.noselect {
+    /* https://stackoverflow.com/a/9314458/12263846 */
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                          supported by Chrome and Opera */
+}
         </style>
     </head>
     <body>
         <p>URL Shortener service</p>
         <div style="position: relative">
-            <div id="httpHint">http://</div>
+            <div id="httpHint" class="noselect">http://</div>
             <input autofocus autocomplete="off" class="big okInput" id="input">
         </div>
         <button class="big" id="send">Shorten</button>
