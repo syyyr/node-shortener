@@ -7,9 +7,19 @@ const printError = (err: string) => {
     document.getElementById("output")!.appendChild(output);
 }
 
+const processInput = (input: string) => {
+    if (/^.+:\/\//.test(input)) {
+        hidePlaceholder();
+        return input;
+    } else {
+        showPlaceholder();
+        return `http://${input}`;
+    }
+};
+
 const shorten = async () => {
     document.getElementById("output")!.innerHTML = "";
-    const value = (<HTMLInputElement>document.getElementById("input")!).value;
+    const value = processInput((<HTMLInputElement>document.getElementById("input")!).value);
     try {
         const response = await fetch("/", {
             body: JSON.stringify({ url: value }),
@@ -46,12 +56,32 @@ const shorten = async () => {
     }
 };
 
-let input = document.getElementById("input")!;
+const placeholder = document.getElementById("httpHint")!;
+const placeholderWidth = placeholder.offsetWidth;
+const input = document.getElementById("input")!;
+
+const showPlaceholder = () => {
+    placeholder.style.display = "inline-block";
+    input.style.paddingLeft = `${placeholderWidth}px`;
+    input.style.width = `calc(100% - ${placeholderWidth}px)`;
+};
+
+const hidePlaceholder = () => {
+    placeholder.style.display = "none";
+    input.style.paddingLeft = "0px";
+    input.style.width = "100%";
+};
+
+showPlaceholder();
+
 
 input.oninput = (ev) => {
     document.getElementById("output")!.innerHTML = "";
     const target = (<HTMLInputElement>ev.target);
-    if (target.value === "" || isWebUri.isWebUri(target.value)) {
+
+    const input = processInput(target.value);
+
+    if (input === "http://" || isWebUri.isWebUri(input)) {
         document.getElementById("fieldBgError")?.remove();
         target.classList.replace("errorInput", "okInput");
     } else {

@@ -18,11 +18,6 @@ body {
     width: 90%;
     margin: auto;
 }
-#input {
-    border-width: 2px;
-    width: 100%;
-    font-family: "Courier New", Courier, monospace;
-}
 .big {
     font-size: 1em;
 }
@@ -38,9 +33,20 @@ body {
     bottom: 0;
     right: 0;
 }
-.errorOutput {
-    color: red;
-    font-weight: bold;
+#httpHint {
+    font-family: "Courier New", Courier, monospace;
+    display: inline-block;
+    font-size: 1em;
+    position: absolute;
+    transform: translate(0%, -50%);
+    top: 50%;
+    margin: 0 2px ;
+    color: grey;
+}
+#input {
+    border-width: 2px;
+    font-family: "Courier New", Courier, monospace;
+    width: 100%;
 }
 .errorInput {
     border-color: red;
@@ -50,12 +56,17 @@ body {
     border-color: black;
     background: white;
 }
+.errorOutput {
+    color: red;
+    font-weight: bold;
+}
         </style>
     </head>
     <body>
         <p>URL Shortener service</p>
         <div style="position: relative">
-            <input autofocus type="text" autocomplete="off" placeholder="Type your URL..." class="big okInput" id="input">
+            <div id="httpHint">http://</div>
+            <input autofocus autocomplete="off" class="big okInput" id="input">
         </div>
         <button class="big" id="send">Shorten</button>
         <div class="big" id="output"></div>
