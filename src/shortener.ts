@@ -42,7 +42,9 @@ const shortener = async (prefix = "", logger = (msg: string, _req?: express.Requ
     const client = new Mongo.MongoClient("mongodb://localhost:27017/shortener", {
         useUnifiedTopology: true
     });
+    logger("Connecting to mongodb...");
     await client.connect();
+    logger("Connected to mongodb.");
     database = client.db().collection("shortener");
     const router = express.Router();
 
@@ -79,6 +81,8 @@ const shortener = async (prefix = "", logger = (msg: string, _req?: express.Requ
             response.json({ ok: false, error: "Invalid request." });
         }
     });
+
+    logger("Shortener initialized.");
 
     return router;
 }
