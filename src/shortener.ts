@@ -38,7 +38,7 @@ const generateRedirectPage = (url: string): string => {
     return file.replace(/@URL@/gu, Buffer.from(url).toString("base64"));
 };
 
-const shortener = async (prefix = "", logger = (_req: express.Request, msg: string) => console.log(msg)) => {
+const shortener = async (prefix = "", logger = (msg: string, _req?: express.Request) => console.log(msg)) => {
     const client = new Mongo.MongoClient("mongodb://localhost:27017/shortener", {
         useUnifiedTopology: true
     });
@@ -55,7 +55,7 @@ const shortener = async (prefix = "", logger = (_req: express.Request, msg: stri
         let shortUrl = req.params["link"];
         try {
             let resolved = await resolveShortened(shortUrl);
-            logger(req, `${shortUrl} is resolved to "${resolved}"`);
+            logger(`${shortUrl} is resolved to "${resolved}"`, req);
             response.send(generateRedirectPage(resolved));
         } catch (err) {
             response.send(err.message);
@@ -63,19 +63,19 @@ const shortener = async (prefix = "", logger = (_req: express.Request, msg: stri
     });
 
     router.post(prefix + "/", async (req, response) => {
-        logger(req, "New url to shorten.");
+        logger("New url to shorten.", req);
         if (isValidReqBody(req.body)) {
             if (!isWebUri.isWebUri(req.body.url)) {
                 const errorMsg = `"${req.body.url}" is not a valid URL by my standards.`;
-                logger(req, errorMsg);
+                logger(errorMsg, req);
                 response.json({ ok: false, error: errorMsg});
                 return;
             }
             let shortUrl = await createShortened(req.body.url);
-            logger(req, `New short url created: ${shortUrl}`);
+            logger(`New short url created: ${shortUrl}`, req);
             response.json({ ok: true, ...req.body, short: shortUrl });
         } else {
-            logger(req, "Invalid request." );
+            logger("Invalid request.", req);
             response.json({ ok: false, error: "Invalid request." });
         }
     });
