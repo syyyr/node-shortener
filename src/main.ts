@@ -7,6 +7,8 @@ shortener().then((shortener) => {
     console.log("Shortener started.");
     app.use(shortener);
     app.listen(3000);
+}).catch((err) => {
+    console.log(err);
 });
 
 

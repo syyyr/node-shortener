@@ -40,10 +40,14 @@ const generateRedirectPage = (url: string): string => {
 
 const shortener = async (prefix = "", logger = (msg: string, _req?: express.Request) => console.log(msg)) => {
     const client = new Mongo.MongoClient("mongodb://localhost:27017/shortener", {
-        useUnifiedTopology: true
-    });
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 1000
+    } as Mongo.MongoClientOptions); // Typings are wrong and don't have serverSelectionTimeoutMS
     logger("Connecting to mongodb...");
-    await client.connect();
+    await client.connect().catch((err) => {logger(err);});
+    if (!client.isConnected()) {
+        throw new Error("Can't initialize shortener.");
+    }
     logger("Connected to mongodb.");
     database = client.db().collection("shortener");
     const router = express.Router();
