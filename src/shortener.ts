@@ -38,7 +38,7 @@ const generateRedirectPage = (url: string): string => {
     return file.replace(/@URL@/gu, Buffer.from(url).toString("base64"));
 };
 
-const shortener = async (prefix = "", logger = (msg: string, _req?: express.Request) => console.log(msg)) => {
+const shortener = async (prefix = "", logger = (msg: string, _res?: express.Response) => console.log(msg)) => {
     const client = new Mongo.MongoClient("mongodb://localhost:27017/shortener", {
         useUnifiedTopology: true,
         serverSelectionTimeoutMS: 1000
@@ -57,32 +57,32 @@ const shortener = async (prefix = "", logger = (msg: string, _req?: express.Requ
     }));
     router.use(express.json());
 
-    router.get(prefix + "/:link", async (req, response) => {
+    router.get(prefix + "/:link", async (req, res) => {
         let shortUrl = req.params["link"];
         try {
             let resolved = await resolveShortened(shortUrl);
-            logger(`${shortUrl} is resolved to "${resolved}"`, req);
-            response.send(generateRedirectPage(resolved));
+            logger(`${shortUrl} is resolved to "${resolved}"`, res);
+            res.send(generateRedirectPage(resolved));
         } catch (err) {
-            response.send(err.message);
+            res.send(err.message);
         }
     });
 
-    router.post(prefix + "/", async (req, response) => {
-        logger("New url to shorten.", req);
+    router.post(prefix + "/", async (req, res) => {
+        logger("New url to shorten.", res);
         if (isValidReqBody(req.body)) {
             if (!isWebUri.isWebUri(req.body.url)) {
                 const errorMsg = `"${req.body.url}" is not a valid URL by my standards.`;
-                logger(errorMsg, req);
-                response.json({ ok: false, error: errorMsg});
+                logger(errorMsg, res);
+                res.json({ ok: false, error: errorMsg});
                 return;
             }
             let shortUrl = await createShortened(req.body.url);
-            logger(`New short url created: ${shortUrl}`, req);
-            response.json({ ok: true, ...req.body, short: shortUrl });
+            logger(`New short url created: ${shortUrl}`, res);
+            res.json({ ok: true, ...req.body, short: shortUrl });
         } else {
-            logger("Invalid request.", req);
-            response.json({ ok: false, error: "Invalid request." });
+            logger("Invalid request.", res);
+            res.json({ ok: false, error: "Invalid request." });
         }
     });
 
