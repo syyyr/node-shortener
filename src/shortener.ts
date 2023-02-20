@@ -64,7 +64,7 @@ const shortener = async (prefix = "", logger = (msg: string, _res?: express.Resp
             logger(`${shortUrl} is resolved to "${resolved}"`, res);
             res.send(generateRedirectPage(resolved));
         } catch (err) {
-            res.send(err.message);
+            res.send((err as any).message);
         }
     });
 
